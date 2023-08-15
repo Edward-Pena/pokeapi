@@ -3,6 +3,7 @@ package com.pokeapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokeapi.entity.Pokemon;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,13 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/api")
 public class PokeapiController {
+    @Value("${pokeapi.base-url}")
+    private String ApiUrl;
     private static final Logger LOGGER = Logger.getLogger(PokeapiController.class.getName());
 
    @GetMapping(value = "/pokemon",produces = MediaType.APPLICATION_JSON_VALUE)
     public Pokemon getOnePokemon(@RequestParam("name") String name) {
-       String url = "https://pokeapi.co/api/v2/pokemon/"+name;
+       String url = ApiUrl+name;
        RestTemplate restTemplate = new RestTemplate();
        try {
            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
